@@ -1,22 +1,17 @@
 package com.homework.app.controller;
 
 import com.homework.app.entity.Note;
-import com.homework.app.service.NoteService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Positive;
+import com.homework.app.service.NoteService; // інтерфейс
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Validated
 @Controller
 public class NoteController {
 
-    private final NoteService noteService;
+    private final NoteService noteService; // інтерфейс
 
     public NoteController(NoteService noteService) {
         this.noteService = noteService;
@@ -34,30 +29,28 @@ public class NoteController {
     }
 
     @PostMapping("/note/create")
-    public String createSubmit(
-            @RequestParam("title") @NotBlank @Size(min = 1, max = 250) String title,
-            @RequestParam("content") @NotBlank String content) {
+    public String createSubmit(@RequestParam("title") String title,
+                               @RequestParam("content") String content) {
         noteService.addNote(new Note(null, title, content));
         return "redirect:/note/list";
     }
 
     @PostMapping("/note/delete")
-    public String delete(@RequestParam("id") @Positive long id) {
+    public String delete(@RequestParam("id") long id) {
         noteService.deleteById(id);
         return "redirect:/note/list";
     }
 
     @GetMapping("/note/edit")
-    public String editForm(@RequestParam("id") @Positive long id, Model model) {
+    public String editForm(@RequestParam("id") long id, Model model) {
         model.addAttribute("note", noteService.getById(id));
         return "note-edit";
     }
 
     @PostMapping("/note/edit")
-    public String editSubmit(
-            @RequestParam("id") @Positive long id,
-            @RequestParam("title") @NotBlank @Size(min = 1, max = 250) String title,
-            @RequestParam("content") @NotBlank String content) {
+    public String editSubmit(@RequestParam("id") long id,
+                             @RequestParam("title") String title,
+                             @RequestParam("content") String content) {
         noteService.updateNote(new Note(id, title, content));
         return "redirect:/note/list";
     }
