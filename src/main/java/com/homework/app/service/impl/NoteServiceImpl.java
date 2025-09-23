@@ -33,7 +33,9 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note addNote(Note note) {
         requireValidForCreate(note);
-        return repo.save(new Note(null, note.getTitle(), note.getContent()));
+        note.setTitle(note.getTitle());
+        note.setContent(note.getContent());
+        return repo.save(note);
     }
 
     @Override
