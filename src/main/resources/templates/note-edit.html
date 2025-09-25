@@ -9,7 +9,10 @@
 <body class="bg-light">
 <div class="container py-4">
   <h1 class="h3 mb-3">Edit Note</h1>
-
+  <form th:action="@{/logout}" method="post" class="d-inline">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <button type="submit" class="btn btn-outline-danger">Logout</button>
+  </form>
   <form th:action="@{'/note/edit'}" method="post" class="card shadow-sm p-3">
     <input type="hidden" name="id" th:value="${note.id}">
 
